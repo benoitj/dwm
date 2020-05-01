@@ -16,7 +16,7 @@ static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { dracul_foreground, dracul_background, dracul_pink },
+	[SchemeNorm] = { dracul_foreground, dracul_background, dracul_purple },
 	[SchemeSel]  = { dracul_foreground, dracul_selection,  dracul_green  },
 };
 
