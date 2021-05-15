@@ -32,6 +32,7 @@ static const Rule rules[] = {
 	{ "Gimp",     NULL,       NULL,       0,            0,           1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1,            0,           0,           -1 },
 	{ "Mixer",    NULL,       NULL,       0,            1,           1,           -1 },
+	{ NULL,       NULL, "mpvfloat",       0,            0,           1,           -1 },
 };
 
 /* layout(s) */
