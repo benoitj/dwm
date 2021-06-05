@@ -1,6 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
 #include "dracula-colors.h"
+#include "movestack.c"
+#include <X11/XF86keysym.h>
 
 /* appearance */
 static const unsigned int borderpx = 3; /* border pixel of windows */
@@ -55,8 +57,9 @@ static const Layout layouts[] = {
 #define TAGKEYS(KEY, TAG)                                                      \
   {MODKEY, KEY, view, {.ui = 1 << TAG}},                                       \
       {MODKEY | ControlMask, KEY, toggleview, {.ui = 1 << TAG}},               \
-      {MODKEY | ShiftMask, KEY, tag, {.ui = 1 << TAG}},                        \
-      {MODKEY | ControlMask | ShiftMask, KEY, toggletag, {.ui = 1 << TAG}},
+      {MODKEY | ShiftMask, KEY, tag, {.ui = 1 << TAG}}, {                      \
+    MODKEY | ControlMask | ShiftMask, KEY, toggletag, { .ui = 1 << TAG }       \
+  }
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd)                                                             \
@@ -71,6 +74,32 @@ static const char *dmenucmd[] = {
     "dmenu_run", "-m",      dmenumon, "-fn",    dmenufont, "-nb",     col_gray1,
     "-nf",       col_gray3, "-sb",    col_cyan, "-sf",     col_gray4, NULL};
 static const char *termcmd[] = {"st", NULL};
+static const char *rofiruncmd[] = {
+    "rofi",        "-theme",   "gruvbox-dark", "-show", "combi",
+    "-combi-modi", "run,drun", "-modi",        "combi", NULL};
+static const char *session_menu_cmd[] = {"session-menu", NULL};
+static const char *pulsemixer_cmd[] = {"st", "-c",         "Mixer",
+                                       "-e", "pulsemixer", NULL};
+static const char *rofi_surfraw_cmd[] = {"rofi-surfraw", NULL};
+static const char *ec_cmd[] = {"ec", NULL};
+static const char *keyboard_layout_cmd[] = {"keyboard-layout", NULL};
+static const char *displayselect_cmd[] = {"displayselect", NULL};
+static const char *ranger_cmd[] = {"st", "-e", "ranger", NULL};
+static const char *capture_upload_cmd[] = {"capture_upload", NULL};
+static const char *capture_cmd[] = {"capture", NULL};
+static const char *pamixer_inc_fast_cmd[] = {"pamixer", "--allow-boost", "-i",
+                                             "15", NULL};
+static const char *pamixer_inc_cmd[] = {"pamixer", "--allow-boost", "-i", "5",
+                                        NULL};
+static const char *pamixer_dec_fast_cmd[] = {"pamixer", "--allow-boost", "-d",
+                                             "15", NULL};
+static const char *pamixer_dec_cmd[] = {"pamixer", "--allow-boost", "-d", "5",
+                                        NULL};
+static const char *pamixer_mute_cmd[] = {"pamixer", "--allow-boost", "-t",
+                                         NULL};
+static const char *mpc_play_cmd[] = {"mpc", "-q", "toggle", NULL};
+static const char *mpc_prev_cmd[] = {"mpc", "-q", "prev", NULL};
+static const char *mpc_next_cmd[] = {"mpc", "-q", "next", NULL};
 
 static Key keys[] = {
     /* modifier                     key        function        argument */
@@ -98,9 +127,45 @@ static Key keys[] = {
     {MODKEY, XK_Right, focusmon, {.i = +1}},
     {MODKEY | ShiftMask, XK_Left, tagmon, {.i = -1}},
     {MODKEY | ShiftMask, XK_Right, tagmon, {.i = +1}},
-    TAGKEYS(XK_1, 0) TAGKEYS(XK_2, 1) TAGKEYS(XK_3, 2) TAGKEYS(XK_4, 3)
-        TAGKEYS(XK_5, 4) TAGKEYS(XK_6, 5) TAGKEYS(XK_7, 6) TAGKEYS(XK_8, 7)
-            TAGKEYS(XK_9, 8){MODKEY | ShiftMask, XK_e, quit, {0}},
+    TAGKEYS(XK_1, 0),
+    TAGKEYS(XK_2, 1),
+    TAGKEYS(XK_3, 2),
+    TAGKEYS(XK_4, 3),
+    TAGKEYS(XK_5, 4),
+    TAGKEYS(XK_6, 5),
+    TAGKEYS(XK_7, 6),
+    TAGKEYS(XK_8, 7),
+    TAGKEYS(XK_9, 8),
+    {MODKEY, XK_Return, spawn, {.v = termcmd}},
+    {MODKEY, XK_d, spawn, {.v = rofiruncmd}},
+    {MODKEY | ShiftMask, XK_e, spawn, {.v = session_menu_cmd}},
+    {MODKEY, XK_m, spawn, {.v = pulsemixer_cmd}},
+    {MODKEY, XK_grave, spawn, {.v = ec_cmd}},
+    {MODKEY, XK_s, spawn, {.v = rofi_surfraw_cmd}},
+    {MODKEY, XK_F8, spawn, {.v = keyboard_layout_cmd}},
+    {MODKEY, XK_F7, spawn, {.v = displayselect_cmd}},
+    {MODKEY, XK_F1, spawn, {.v = ranger_cmd}},
+    {MODKEY | ShiftMask, XK_Print, spawn, {.v = capture_upload_cmd}},
+    {MODKEY, XK_Print, spawn, {.v = capture_cmd}},
+
+    {MODKEY, XF86XK_AudioRaiseVolume, spawn, {.v = pamixer_inc_fast_cmd}},
+    {MODKEY | ShiftMask,
+     XF86XK_AudioRaiseVolume,
+     spawn,
+     {.v = pamixer_inc_cmd}},
+
+    {MODKEY, XF86XK_AudioLowerVolume, spawn, {.v = pamixer_dec_fast_cmd}},
+    {MODKEY | ShiftMask,
+     XF86XK_AudioLowerVolume,
+     spawn,
+     {.v = pamixer_dec_cmd}},
+
+    {MODKEY | ShiftMask, XF86XK_AudioMute, spawn, {.v = pamixer_mute_cmd}},
+
+    {MODKEY, XF86XK_AudioPlay, spawn, {.v = mpc_play_cmd}},
+
+    {MODKEY, XF86XK_AudioPrev, spawn, {.v = mpc_prev_cmd}},
+    {MODKEY, XF86XK_AudioNext, spawn, {.v = mpc_next_cmd}},
 };
 
 /* button definitions */
