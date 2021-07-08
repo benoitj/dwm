@@ -82,6 +82,7 @@ static const char *pulsemixer_cmd[] = {"st", "-c",         "Mixer",
                                        "-e", "pulsemixer", NULL};
 static const char *rofi_surfraw_cmd[] = {"rofi-surfraw", NULL};
 static const char *ec_cmd[] = {"ec", NULL};
+static const char *org_capture_cmd[] = {"org-capture", NULL};
 static const char *keyboard_layout_cmd[] = {"keyboard-layout", NULL};
 static const char *displayselect_cmd[] = {"displayselect", NULL};
 static const char *ranger_cmd[] = {"st", "-e", "ranger", NULL};
@@ -141,6 +142,7 @@ static Key keys[] = {
     {MODKEY | ShiftMask, XK_e, spawn, {.v = session_menu_cmd}},
     {MODKEY, XK_m, spawn, {.v = pulsemixer_cmd}},
     {MODKEY, XK_grave, spawn, {.v = ec_cmd}},
+    {MODKEY | ShiftMask, XK_grave, spawn, {.v = org_capture_cmd}},
     {MODKEY, XK_s, spawn, {.v = rofi_surfraw_cmd}},
     {MODKEY, XK_F8, spawn, {.v = keyboard_layout_cmd}},
     {MODKEY, XK_F7, spawn, {.v = displayselect_cmd}},
