@@ -1599,8 +1599,10 @@ Layout *last_layout;
 void
 fullscreen(const Arg *arg)
 {
-	if (selmon->showbar) {
-		for(last_layout = (Layout *)layouts; last_layout != selmon->lt[selmon->sellt]; last_layout++);
+	Layout *current_layout;
+	for(current_layout = (Layout *)layouts; current_layout != selmon->lt[selmon->sellt]; current_layout++);
+	if (current_layout != &layouts[2]) {
+		last_layout = current_layout;
 		setlayout(&((Arg) { .v = &layouts[2] }));
 	} else {
 		setlayout(&((Arg) { .v = last_layout }));
