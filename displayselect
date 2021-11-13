@@ -9,6 +9,8 @@ set -o errexit
 
 DMENU="rofi -dmenu -l 4"
 
+mkdir -p "$HOME/.config/autorandr"
+
 choices=$(echo "auto"; cd $HOME/.config/autorandr; ls -1 | grep -v default | sort)
 
 chosen=$(echo -e "$choices" | $DMENU -p "Display layout")
